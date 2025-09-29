@@ -10,7 +10,7 @@ default_args = {
 
 with DAG(
     dag_id="dbt-vehicle_price_prediction",
-    start_date=datetime(2025, 9, 21),
+    start_date=days_ago(1),
     schedule_interval=None,  
     catchup=False,
     default_args=default_args,

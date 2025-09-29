@@ -4,19 +4,12 @@ with stg as (
 
 select
     vehicle_id,
-    make,
-    model,
-    year,
-    engine_hp,
+    staging_id,
+    price,
     mileage,
+    engine_hp,
     vehicle_age,
     mileage_per_year,
-    fuel_type,
-    transmission,
-    drivetrain,
-    body_type,
-    vehicle_condition,
-    is_electric,
-    price,
-    price_per_mile
+    price_per_mile,
+    is_electric
 from stg;
