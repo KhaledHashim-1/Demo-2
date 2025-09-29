@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: khaled_projects
+    database: ready-de27
+    schema: khaled_projects
+    tables:
+      - name: Demo-2-raw_vehicle_price_prediction
