@@ -32,6 +32,6 @@ with DAG(
             )
 
             if previous_task:
-                previous_task >> task  # chain inside group
+                previous_task >> task  
 
             previous_task = task

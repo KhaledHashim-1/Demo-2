@@ -5,6 +5,7 @@ airflow-local/logs/
 airflow-local/tmp/
 airflow-local/*.db
 airflow-local/my_dbt_project/
+airflow-local/data/
 
 my_dbt_project/target/
 my_dbt_project/dbt_packages/
