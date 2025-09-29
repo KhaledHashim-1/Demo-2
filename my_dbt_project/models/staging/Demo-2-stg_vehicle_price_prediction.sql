@@ -4,7 +4,6 @@ with source as (
 
 cleaned as (
     select
-
         to_hex(md5(concat_ws('|',
             lower(trim(nullif(make, ''))),
             lower(trim(nullif(model, ''))),
@@ -14,9 +13,6 @@ cleaned as (
             lower(trim(nullif(transmission, ''))),
             lower(trim(nullif(fuel_type, '')))
         ))) as vehicle_id,
-
-
-        row_number() over () as staging_id,
 
         lower(trim(nullif(make, ''))) as make,
         lower(trim(nullif(model, ''))) as model,

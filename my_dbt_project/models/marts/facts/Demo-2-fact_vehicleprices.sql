@@ -4,7 +4,6 @@ with stg as (
 
 select
     vehicle_id,
-    staging_id,
     price,
     mileage,
     engine_hp,
