@@ -1,5 +1,6 @@
 with stg as (
-    select * from {{ ref('Demo-2-stg_vehicle_price_prediction') }}
+    select * 
+    from {{ ref('Demo-2-stg_vehicle_price_prediction') }}
 )
 
 select distinct

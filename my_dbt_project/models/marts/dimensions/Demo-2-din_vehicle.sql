@@ -1,5 +1,6 @@
 with stg as (
-    select * from {{ ref('Demo-2-stg_vehicle_price_prediction') }}
+    select * 
+    from {{ ref('Demo-2-stg_vehicle_price_prediction') }}
 )
 
 select distinct
@@ -11,6 +12,7 @@ select distinct
     drivetrain,
     transmission,
     fuel_type,
+    engine_hp,            
     vehicle_condition,
     vehicle_trim
 from stg;

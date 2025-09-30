@@ -1,14 +1,20 @@
 with stg as (
-    select * from {{ ref('Demo-2-stg_vehicle_price_prediction') }}
+    select * 
+    from {{ ref('Demo-2-stg_vehicle_price_prediction') }}
 )
 
 select
     vehicle_id,
-    price,
+    current_date() as snapshot_date,  
+    
     mileage,
-    engine_hp,
+    price,
     vehicle_age,
     mileage_per_year,
     price_per_mile,
-    is_electric
+    
+    is_electric,
+    is_outlier_mileage,
+    is_outlier_price
+
 from stg;
