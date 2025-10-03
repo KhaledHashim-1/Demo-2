@@ -1,4 +1,4 @@
-# E-commerce ELT Pipeline with Airflow, dbt, and BigQuery
+# Vehicle Price Prediction ELT Pipeline with Airflow, dbt, and BigQuery
 
 ## Overview
 This project implements an end-to-end ELT pipeline for vehicle price prediction dataset.  
