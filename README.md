@@ -80,6 +80,5 @@ During development, several SQL changes were made for BigQuery compatibility:
   ```sql
   {{ config(materialized='view') }}
   
-Running the Pipeline
 
 
