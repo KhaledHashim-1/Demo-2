@@ -1,7 +1,7 @@
 # E-commerce ELT Pipeline with Airflow, dbt, and BigQuery
 
 ## Overview
-This project implements an end-to-end ELT pipeline for an e-commerce dataset.  
+This project implements an end-to-end ELT pipeline for vehicle price prediction dataset.  
 It uses **Apache Airflow** for orchestration, **Google Cloud Storage (GCS)** and **BigQuery** for storage and processing, and **dbt** for data transformations.
 
 The pipeline:
@@ -31,20 +31,20 @@ BigQuery analytics-ready views
 
 ### Airflow DAGs (`/dags`)
 
-- **`el-ecommerce`** (Extract and Load pipeline)  
+- **`el-vehicle_price_prediction`** (Extract and Load pipeline)  
   - Downloads dataset from Kaggle  
   - Unzips and uploads to GCS  
-  - Loads into BigQuery (`ready-de27.khaled_projects.Demo-1-raw_ecommerce`)  
+  - Loads into BigQuery (`ready-de27.khaled_projects.Demo-2-raw_vehicle_price_prediction`)  
 
-- **`dbt-ecommerce`** (Transformation pipeline)  
+- **`dbt-vehicle_price_prediction`** (Transformation pipeline)  
   - Runs staging models (data cleaning, type casting, derived features)  
   - Runs marts (fact and dimension tables)  
   - Runs reporting models  
 
-- **`controller_master_khaled_parallel`** (Controller DAG)  
+- **`master_dag_vehicles`** (Controller DAG)  
   - Triggers both pipelines in sequence:  
-    `el-ecommerce → dbt-ecommerce`
-
+    `el-vehicle_price_prediction → dbt-vehicle_price_prediction`
+  - And is able to trigger other dags in parallel if needed.
 ---
 
 ### dbt Models (`/dbt/my_dbt_project/models`)
@@ -68,17 +68,6 @@ BigQuery analytics-ready views
   - `Demo-2-rpt_vehicleprice_analytics.sql`  
     - Combines fact and dimension tables into an analytics-ready view  
 
----
-
-## BigQuery-Specific Adjustments
-
-During development, several SQL changes were made for BigQuery compatibility:
-
-- Replaced `concat_ws()` with `concat()` using manual delimiters  
-- Fixed `NULLIF(INT64, STRING)` errors using `SAFE_CAST(NULLIF(...))`  
-- Removed `CREATE OR REPLACE VIEW` statements in reporting models and instead used dbt’s:
-  ```sql
-  {{ config(materialized='view') }}
   
 
 
