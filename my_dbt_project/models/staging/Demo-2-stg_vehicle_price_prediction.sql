@@ -5,53 +5,55 @@ with source as (
 
 cleaned as (
     select
-        to_hex(md5(concat_ws('|',
-            lower(trim(nullif(make, ''))),
-            lower(trim(nullif(model, ''))),
-            nullif(year, ''), 
-            lower(trim(nullif(transmission, ''))),
-            lower(trim(nullif(fuel_type, ''))),
-            lower(trim(nullif(drivetrain, ''))),
-            lower(trim(nullif(trim, '')))
-        ))) as vehicle_id,
+        to_hex(md5(
+            concat(
+                coalesce(lower(trim(nullif(cast(make as string), ''))), ''), '|',
+                coalesce(lower(trim(nullif(cast(model as string), ''))), ''), '|',
+                coalesce(nullif(cast(year as string), ''), ''), '|',
+                coalesce(lower(trim(nullif(cast(transmission as string), ''))), ''), '|',
+                coalesce(lower(trim(nullif(cast(fuel_type as string), ''))), ''), '|',
+                coalesce(lower(trim(nullif(cast(drivetrain as string), ''))), ''), '|',
+                coalesce(lower(trim(nullif(cast(trim as string), ''))), '')
+            )
+        )) as vehicle_id,
 
-        lower(trim(nullif(make, ''))) as make,
-        lower(trim(nullif(model, ''))) as model,
-        cast(nullif(year, '') as int64) as year,
-        cast(nullif(mileage, '') as int64) as mileage,
-        cast(nullif(engine_hp, '') as float64) as engine_hp,
+        lower(trim(nullif(cast(make as string), ''))) as make,
+        lower(trim(nullif(cast(model as string), ''))) as model,
+        safe_cast(nullif(cast(year as string), '') as int64) as year,
+        safe_cast(nullif(cast(mileage as string), '') as int64) as mileage,
+        safe_cast(nullif(cast(engine_hp as string), '') as float64) as engine_hp,
 
-        lower(trim(nullif(transmission, ''))) as transmission,
-        lower(trim(nullif(fuel_type, ''))) as fuel_type,
-        lower(trim(nullif(drivetrain, ''))) as drivetrain,
-        lower(trim(nullif(body_type, ''))) as body_type,
-        lower(trim(nullif(exterior_color, ''))) as exterior_color,
-        lower(trim(nullif(interior_color, ''))) as interior_color,
+        lower(trim(nullif(cast(transmission as string), ''))) as transmission,
+        lower(trim(nullif(cast(fuel_type as string), ''))) as fuel_type,
+        lower(trim(nullif(cast(drivetrain as string), ''))) as drivetrain,
+        lower(trim(nullif(cast(body_type as string), ''))) as body_type,
+        lower(trim(nullif(cast(exterior_color as string), ''))) as exterior_color,
+        lower(trim(nullif(cast(interior_color as string), ''))) as interior_color,
 
-        cast(nullif(owner_count, '') as int64) as owner_count,
+        safe_cast(nullif(cast(owner_count as string), '') as int64) as owner_count,
 
         case 
-            when lower(trim(accident_history)) in ('', 'none', 'no', '0', 'n/a') then 'none'
-            when regexp_contains(lower(accident_history), r'(yes|minor|major|reported|accident)') then 'reported'
-            else lower(trim(accident_history))
+            when lower(trim(cast(accident_history as string))) in ('', 'none', 'no', '0', 'n/a') then 'none'
+            when regexp_contains(lower(cast(accident_history as string)), r'(yes|minor|major|reported|accident)') then 'reported'
+            else lower(trim(cast(accident_history as string)))
         end as accident_history,
 
-        lower(trim(nullif(seller_type, ''))) as seller_type,
-        lower(trim(nullif(condition, ''))) as vehicle_condition,
-        lower(trim(nullif(trim, ''))) as vehicle_trim,
+        lower(trim(nullif(cast(seller_type as string), ''))) as seller_type,
+        lower(trim(nullif(cast(condition as string), ''))) as vehicle_condition,
+        lower(trim(nullif(cast(trim as string), ''))) as vehicle_trim,
 
-        cast(nullif(vehicle_age, '') as int64) as vehicle_age,
+        safe_cast(nullif(cast(vehicle_age as string), '') as int64) as vehicle_age,
 
         case 
             when safe_cast(vehicle_age as int64) > 0 and safe_cast(mileage as int64) is not null
-                 then round(cast(mileage as float64) / cast(vehicle_age as float64), 2)
+                 then round(safe_cast(mileage as float64) / safe_cast(vehicle_age as float64), 2)
             else null 
         end as mileage_per_year,
 
-        cast(nullif(brand_popularity, '') as float64) as brand_popularity,
-        cast(nullif(price, '') as numeric) as price,
+        safe_cast(nullif(cast(brand_popularity as string), '') as float64) as brand_popularity,
+        safe_cast(nullif(cast(price as string), '') as numeric) as price,
 
-        case when lower(fuel_type) = 'electric' then true else false end as is_electric,
+        case when lower(cast(fuel_type as string)) = 'electric' then true else false end as is_electric,
 
         case 
             when mileage is not null and mileage > 0 and price is not null and price > 0
@@ -59,11 +61,10 @@ cleaned as (
             else null 
         end as price_per_mile,
 
-        -- Outlier flags
         case when mileage > 500000 then true else false end as is_outlier_mileage,
         case when price > 200000 then true else false end as is_outlier_price
 
     from source
 )
 
-select * from cleaned;
+select * from cleaned

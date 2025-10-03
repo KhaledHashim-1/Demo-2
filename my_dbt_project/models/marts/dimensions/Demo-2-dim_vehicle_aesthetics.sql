@@ -9,4 +9,4 @@ select distinct
     interior_color
 from stg
 where exterior_color is not null
-   or interior_color is not null;
+   or interior_color is not null

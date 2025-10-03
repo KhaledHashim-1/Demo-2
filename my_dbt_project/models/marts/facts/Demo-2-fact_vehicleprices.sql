@@ -17,4 +17,4 @@ select
     is_outlier_mileage,
     is_outlier_price
 
-from stg;
+from stg

@@ -16,4 +16,4 @@ select distinct
 
 from stg
 where seller_type is not null
-   or brand_popularity is not null;
+   or brand_popularity is not null

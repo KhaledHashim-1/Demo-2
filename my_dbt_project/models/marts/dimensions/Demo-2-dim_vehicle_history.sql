@@ -20,4 +20,4 @@ select distinct
 
 from stg
 where owner_count is not null
-   or accident_history is not null;
+   or accident_history is not null

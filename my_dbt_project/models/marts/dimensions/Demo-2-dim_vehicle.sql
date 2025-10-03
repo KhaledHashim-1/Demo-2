@@ -15,4 +15,4 @@ select distinct
     engine_hp,            
     vehicle_condition,
     vehicle_trim
-from stg;
+from stg

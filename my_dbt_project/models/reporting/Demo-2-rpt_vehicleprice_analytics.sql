@@ -1,19 +1,19 @@
-create or replace view reporting.vehicle_price_analysis as
+{{ config(materialized='view') }}
 
 with fact as (
-    select * from {{ ref('Demo-2-fact_vehicle_snapshot') }}
+    select * from {{ ref('Demo-2-fact_vehicleprices') }}
 ),
 vehicles as (
-    select * from {{ ref('Demo-2-dim_vehicles') }}
+    select * from {{ ref('Demo-2-dim_vehicle') }}
 ),
 aesthetics as (
-    select * from {{ ref('Demo-2-dim_aesthetic') }}
+    select * from {{ ref('Demo-2-dim_vehicle_aesthetics') }}
 ),
 history as (
     select * from {{ ref('Demo-2-dim_vehicle_history') }}
 ),
 market as (
-    select * from {{ ref('Demo-2-dim_market') }}
+    select * from {{ ref('Demo-2-dim_vehicle_market') }}
 )
 
 select
@@ -55,4 +55,4 @@ from fact f
 left join vehicles v   on f.vehicle_id = v.vehicle_id
 left join aesthetics a on f.vehicle_id = a.vehicle_id
 left join history h    on f.vehicle_id = h.vehicle_id
-left join market m     on f.vehicle_id = m.vehicle_id;
+left join market m     on f.vehicle_id = m.vehicle_id
